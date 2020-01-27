@@ -14,4 +14,25 @@ public class IntratimeProperties {
     @Getter @Setter
     private String commandsUrl;
 
+    /*
+    Hora general de entrada y horquilla de desfase
+     */
+    @Getter @Setter
+    private int checkInDelay;
+    @Getter @Setter
+    private int checkInHour;
+
+    /*
+    Hora general de salida a comer, horquilla desfase,
+    duracion comida y horquilla desfase duracion
+     */
+    @Getter @Setter
+    private int breakOutHour;
+    @Getter @Setter
+    private int breakOutDelay;
+    @Getter @Setter
+    private int breakDuration;
+    @Getter @Setter
+    private int breakAlteration;
+
 }
