@@ -1,4 +1,4 @@
-package org.acwar.impersonator;
+package org.acwar.impersonator.enums;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,9 +6,9 @@ import lombok.Setter;
 public enum IntratimeCommandsEnum {
 
     CHECKIN(0),
-    BREAKOUT(1),
-    BREAKBACK(2),
-    CHECKOUT(3);
+    BREAKOUT(2),
+    BREAKBACK(3),
+    CHECKOUT(1);
 
     private  IntratimeCommandsEnum(int code){
         setCommand(code);
