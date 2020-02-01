@@ -3,15 +3,18 @@ package org.acwar.impersonator;
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
 import org.acwar.impersonator.helpers.CommandsDatesHelper;
+import org.acwar.impersonator.service.IntratimeSchedulable;
 import org.acwar.impersonator.service.IntratimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 
 import java.util.Date;
 import java.util.Map;
@@ -30,18 +33,27 @@ public class ImpersonatorApplication implements CommandLineRunner {
     @Autowired
     private IntratimeProperties properties;
     @Autowired
+    @Qualifier("localThreadPool")
     private ThreadPoolTaskScheduler scheduler;
 
     @Override
     public void run(String... args) throws Exception {
-        log.debug(intratimeService.launchCommand(new Date(), IntratimeCommandsEnum.CHECKOUT).toString());
-        Map<IntratimeCommandsEnum,Date> dayDates = CommandsDatesHelper.generateDatesSet(properties);
 
-        scheduler.schedule(
-                intratimeService.launchCommand(new Date(), IntratimeCommandsEnum.CHECKIN),
-                new Date()
+        scheduler.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    Map<IntratimeCommandsEnum,Date> dayDates = CommandsDatesHelper.generateDatesSet(properties);
+                    for (IntratimeCommandsEnum command:dayDates.keySet()){
+                        log.debug("Command " + command.toString() + " scheduled for " + dayDates.get(command));
+                        scheduler.schedule(
+                                new IntratimeSchedulable(intratimeService,command),
+                                dayDates.get(command)
+                        );
+                    }
+                }
+            },
+            new CronTrigger("0 1 * * 1-5")
         );
-
     }
 
 }

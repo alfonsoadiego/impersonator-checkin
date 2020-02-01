@@ -14,6 +14,9 @@ public class IntratimeProperties {
     @Getter @Setter
     private String commandsUrl;
 
+    @Getter @Setter
+    private String dryRun;
+
     /*
     Hora general de entrada y horquilla de desfase
      */

@@ -33,6 +33,9 @@ public class IntratimeServiceImpl implements IntratimeService {
     public IntratimeInOutBean launchCommand(Date commandDate, IntratimeCommandsEnum command) {
         log.debug("Attempting command " + command.toString());
 
+        if ("true".equals(properties.getDryRun()))
+            return new IntratimeInOutBean();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("token", doLogin().getUSER_TOKEN());

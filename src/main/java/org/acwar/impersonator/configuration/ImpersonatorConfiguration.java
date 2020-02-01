@@ -2,10 +2,12 @@ package org.acwar.impersonator.configuration;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootConfiguration
@@ -31,11 +33,12 @@ public class ImpersonatorConfiguration {
         return template;
     }
 
-//    @Bean
-//    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
-//        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-//        threadPoolTaskScheduler.setPoolSize(5);
-//        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
-//        return threadPoolTaskScheduler;
-//    }
+    @Bean
+    @Qualifier("localThreadPool")
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(5);
+        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+        return threadPoolTaskScheduler;
+    }
 }
