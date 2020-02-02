@@ -2,31 +2,59 @@ package org.acwar.impersonator.helpers;
 
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
+import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class CommandsDatesHelper {
 
-    public static Map<IntratimeCommandsEnum,Date> generateDatesSet(IntratimeProperties properties){
-        Map<IntratimeCommandsEnum,Date> response = new HashMap<>();
+    private CommandsDatesHelper() {
+
+    }
+
+    public static Map<IntratimeCommandsEnum, Date> generateDatesSet(IntratimeProperties properties) throws IntratimeCommandsExceptions {
+        checkInput(properties);
+
+        Map<IntratimeCommandsEnum, Date> response = new EnumMap<>(IntratimeCommandsEnum.class);
 
         Date checkInTime = getCheckInTime(new Date(), properties.getCheckInHour(), properties.getCheckInDelay());
-        response.put(IntratimeCommandsEnum.CHECKIN,checkInTime);
+        response.put(IntratimeCommandsEnum.CHECKIN, checkInTime);
 
         Date breakOutTime = getBreakOutTime(checkInTime, properties.getBreakOutHour(), properties.getBreakOutDelay());
-        response.put(IntratimeCommandsEnum.BREAKOUT,breakOutTime);
+        response.put(IntratimeCommandsEnum.BREAKOUT, breakOutTime);
 
         Date breakBackTime = getBreakBackTime(breakOutTime, properties.getBreakDuration(), properties.getBreakAlteration());
-        response.put(IntratimeCommandsEnum.BREAKBACK,breakBackTime);
+        response.put(IntratimeCommandsEnum.BREAKBACK, breakBackTime);
 
         Date checkOutTime = getCheckOutTime(checkInTime, getTimeInBreak(breakOutTime, breakBackTime));
-        response.put(IntratimeCommandsEnum.CHECKOUT,checkOutTime);
+        response.put(IntratimeCommandsEnum.CHECKOUT, checkOutTime);
 
         return response;
     }
+
+    private static void checkInput(IntratimeProperties properties) throws IntratimeCommandsExceptions {
+
+        if (properties.getCheckInHour() <= 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: CheckInHour");
+        if (properties.getCheckInDelay() < 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: CheckInDelay");
+        if (properties.getBreakOutHour() <= 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: BreakOutHour");
+        if (properties.getBreakOutDelay() < 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: BreakOutDelay");
+        if (properties.getBreakDuration() < 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: BreakDuration");
+        if (properties.getBreakAlteration() < 0)
+            throw new IntratimeCommandsExceptions("Invalid negative parameter: BreakAlteration");
+
+        if (properties.getCheckInHour() > properties.getBreakOutHour())
+            throw new IntratimeCommandsExceptions("Invalid parameter: Breakout sooner than CheckIn");
+
+    }
+
 
     private static Date getCheckInTime(Date date, int checkInOur, int checkInDelay) {
         int minutesDelay = (int) (Double.valueOf(checkInDelay) * (2 * Math.random() - 1));
@@ -60,7 +88,7 @@ public class CommandsDatesHelper {
         calendar.setTime(breakOutTime);
         calendar.set(Calendar.SECOND, (int) (Math.random() * 60));
         calendar.add(Calendar.MINUTE, breakDuration);
-        calendar.add(Calendar.MINUTE, breakAlteration);
+        calendar.add(Calendar.MINUTE, minutesDelay);
 
         return calendar.getTime();
     }

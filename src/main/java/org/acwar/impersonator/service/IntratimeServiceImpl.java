@@ -1,16 +1,14 @@
 package org.acwar.impersonator.service;
 
-import org.acwar.impersonator.enums.IntratimeCommandsEnum;
 import org.acwar.impersonator.beans.IntratimeInOutBean;
 import org.acwar.impersonator.beans.IntratimeUser;
 import org.acwar.impersonator.configuration.IntratimeProperties;
+import org.acwar.impersonator.enums.IntratimeCommandsEnum;
+import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -20,7 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Service
+@Service("intratimeServiceImpl")
 public class IntratimeServiceImpl implements IntratimeService {
     private Logger log = LoggerFactory.getLogger(IntratimeServiceImpl.class);
 
@@ -36,12 +34,10 @@ public class IntratimeServiceImpl implements IntratimeService {
         if ("true".equals(properties.getDryRun()))
             return new IntratimeInOutBean();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("token", doLogin().getUSER_TOKEN());
-        headers.set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36");
+        HttpHeaders headers = getHttpHeaders();
+        if (headers == null) return null;
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("user_action", command.getCommandParam());
         map.add("user_timestamp", formatDate(new Date()));
         map.add("user_use_server_time", "true");
@@ -50,31 +46,50 @@ public class IntratimeServiceImpl implements IntratimeService {
         map.add("expense_amount", "0");
         map.add("from_web", "true");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         ResponseEntity<IntratimeInOutBean> response;
-        try{
+        try {
             response = template.postForEntity(properties.getCommandsUrl(), request, IntratimeInOutBean.class);
-            return response.getBody();
-        }catch (Exception e){
+            if (response.getStatusCode().equals(HttpStatus.OK))
+                return response.getBody();
+            else
+                log.error("Communication problems:" + response.getStatusCode());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private IntratimeUser doLogin() {
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.set("token", doLogin().getUSER_TOKEN());
+            headers.set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36");
+        } catch (IntratimeCommandsExceptions e) {
+            log.error("Unable to do login request.");
+            return null;
+        }
+        return headers;
+    }
+
+    private IntratimeUser doLogin() throws IntratimeCommandsExceptions {
         log.debug("Attempting Login");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("user", properties.getUser());
         map.add("pin", properties.getPin());
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         ResponseEntity<IntratimeUser> response = template.postForEntity(properties.getLoginUrl(), request, IntratimeUser.class);
 
-        log.debug("login successfull");
-        return response.getBody();
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            log.debug("login successfull");
+            return response.getBody();
+        } else
+            throw new IntratimeCommandsExceptions("Error doing login", null);
     }
 
     private String formatDate(Date date) {

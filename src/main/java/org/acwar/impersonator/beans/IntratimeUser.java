@@ -6,40 +6,58 @@ import lombok.Setter;
 import java.util.List;
 
 public class IntratimeUser {
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_ID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_COMPANY;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_NAME;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_EMAIL;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_ROLE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_PASSWORD;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_PIN_HAS_CHANGED;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_LAST_ACCESS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_TOKEN;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_IMAGE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_NIF;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_AFFILIATION;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_WORKING_TIME;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_USERNAME;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String USER_PASWORD;
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<IntratimeWorkcenters> projects;
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<IntratimeWorkcenters> workcenters;
-    @Getter @Setter
+    @Getter
+    @Setter
     private IntratimeCompany company;
 }

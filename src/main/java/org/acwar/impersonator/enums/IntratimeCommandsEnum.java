@@ -10,14 +10,15 @@ public enum IntratimeCommandsEnum {
     BREAKBACK(3),
     CHECKOUT(1);
 
-    private  IntratimeCommandsEnum(int code){
+    IntratimeCommandsEnum(int code) {
         setCommand(code);
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int command;
 
-    public String getCommandParam(){
+    public String getCommandParam() {
         return String.valueOf(command);
     }
 }

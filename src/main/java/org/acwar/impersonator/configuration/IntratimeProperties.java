@@ -5,37 +5,48 @@ import lombok.Setter;
 
 public class IntratimeProperties {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String user;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String pin;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String loginUrl;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String commandsUrl;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String dryRun;
 
     /*
     Hora general de entrada y horquilla de desfase
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int checkInDelay;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int checkInHour;
 
     /*
     Hora general de salida a comer, horquilla desfase,
     duracion comida y horquilla desfase duracion
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int breakOutHour;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int breakOutDelay;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int breakDuration;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int breakAlteration;
 
 }

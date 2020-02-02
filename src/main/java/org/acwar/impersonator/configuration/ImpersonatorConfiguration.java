@@ -15,12 +15,12 @@ public class ImpersonatorConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "intratime")
-    IntratimeProperties properties(){
+    IntratimeProperties properties() {
         return new IntratimeProperties();
     }
 
     @Bean
-    RestTemplate objectMapper(){
+    RestTemplate objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
@@ -28,14 +28,14 @@ public class ImpersonatorConfiguration {
         converter.setObjectMapper(mapper);
 
         RestTemplate template = new RestTemplate();
-        template.getMessageConverters().add(0,converter);
+        template.getMessageConverters().add(0, converter);
 
         return template;
     }
 
     @Bean
     @Qualifier("localThreadPool")
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(5);
         threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");

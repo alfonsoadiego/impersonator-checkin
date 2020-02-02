@@ -4,69 +4,101 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class IntratimeCompany {
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_ID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_UNIQUE_ID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_NAME;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CIF;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CCC;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_ADDRESS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_COUNTRY;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_LOCATION;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CP;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_COORDINATES;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_MAIL;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_PASSWORD;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_PRO;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_RATE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_MODIFICATION_DATE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_DELETION_DATE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_SUBSCRIPTION_CYCLE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_HAS_ADS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANIES_TOKEN;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_LOGO;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_SIGNATURE;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CONTINUOUS_WORKDAYS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_USE_SERVER_TIME;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_FORCE_LOCATION;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CALENDAR_DAYS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_SHOW_CLIENT;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_SHOW_CLIENT_SELECT;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_EMAIL_UPDATES;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_CLOCKIN_MARGIN;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMPANY_API_COMMENTS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String COMERCIAL_ID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String DISTRIBUIDOR_ID;
     @Getter
     @Setter

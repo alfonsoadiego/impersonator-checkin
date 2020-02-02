@@ -8,17 +8,20 @@ import java.util.Date;
 
 public class IntratimeSchedulable implements Runnable {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private IntratimeService commandsLauncher;
-    @Getter @Setter
+    @Getter
+    @Setter
     private IntratimeCommandsEnum action;
 
-    public IntratimeSchedulable (IntratimeService commandsLauncher, IntratimeCommandsEnum action){
+    public IntratimeSchedulable(IntratimeService commandsLauncher, IntratimeCommandsEnum action) {
         setCommandsLauncher(commandsLauncher);
         setAction(action);
     }
+
     @Override
     public void run() {
-        commandsLauncher.launchCommand(new Date(),action);
+        commandsLauncher.launchCommand(new Date(), action);
     }
 }

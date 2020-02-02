@@ -1,7 +1,7 @@
 package org.acwar.impersonator.service;
 
-import org.acwar.impersonator.enums.IntratimeCommandsEnum;
 import org.acwar.impersonator.beans.IntratimeInOutBean;
+import org.acwar.impersonator.enums.IntratimeCommandsEnum;
 
 import java.util.Date;
 

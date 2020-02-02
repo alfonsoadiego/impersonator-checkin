@@ -2,6 +2,7 @@ package org.acwar.impersonator;
 
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
+import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
 import org.acwar.impersonator.helpers.CommandsDatesHelper;
 import org.acwar.impersonator.service.IntratimeSchedulable;
 import org.acwar.impersonator.service.IntratimeService;
@@ -28,6 +29,7 @@ public class ImpersonatorApplication implements CommandLineRunner {
         SpringApplication.run(ImpersonatorApplication.class, args);
     }
 
+    @Qualifier("intratimeServiceImpl")
     @Autowired
     private IntratimeService intratimeService;
     @Autowired
@@ -40,19 +42,26 @@ public class ImpersonatorApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         scheduler.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    Map<IntratimeCommandsEnum,Date> dayDates = CommandsDatesHelper.generateDatesSet(properties);
-                    for (IntratimeCommandsEnum command:dayDates.keySet()){
-                        log.debug("Command " + command.toString() + " scheduled for " + dayDates.get(command));
-                        scheduler.schedule(
-                                new IntratimeSchedulable(intratimeService,command),
-                                dayDates.get(command)
-                        );
-                    }
-                }
-            },
-            new CronTrigger("0 1 * * 1-5")
+                               @Override
+                               public void run() {
+                                   Map<IntratimeCommandsEnum, Date> dayDates = null;
+                                   try {
+                                       dayDates = CommandsDatesHelper.generateDatesSet(properties);
+                                   } catch (IntratimeCommandsExceptions intratimeCommandsExceptions) {
+                                       intratimeCommandsExceptions.printStackTrace();
+                                       log.error("Error in parameters");
+                                       System.exit(1);
+                                   }
+                                   for (IntratimeCommandsEnum command : dayDates.keySet()) {
+                                       log.debug("Command " + command.toString() + " scheduled for " + dayDates.get(command));
+                                       scheduler.schedule(
+                                               new IntratimeSchedulable(intratimeService, command),
+                                               dayDates.get(command)
+                                       );
+                                   }
+                               }
+                           },
+                new CronTrigger("0 1 * * 1-5")
         );
     }
 
