@@ -61,7 +61,7 @@ public class ImpersonatorApplication implements CommandLineRunner {
                                    }
                                }
                            },
-                new CronTrigger("0 1 * * 1-5")
+                new CronTrigger("0 1 * * 1-5 *")
         );
     }
 
