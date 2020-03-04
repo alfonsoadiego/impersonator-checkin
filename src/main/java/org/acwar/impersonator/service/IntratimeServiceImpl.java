@@ -29,10 +29,12 @@ public class IntratimeServiceImpl implements IntratimeService {
 
     @Override
     public IntratimeInOutBean launchCommand(Date commandDate, IntratimeCommandsEnum command) {
-        log.debug("Attempting command " + command.toString());
+        log.debug("Attempting command " + command.toString() + " at " + commandDate);
 
-        if ("true".equals(properties.getDryRun()))
+        if ("true".equals(properties.getDryRun())){
+            log.debug(command.toString() + " DryRunned");
             return new IntratimeInOutBean();
+        }
 
         HttpHeaders headers = getHttpHeaders();
         if (headers == null) return null;
@@ -50,8 +52,10 @@ public class IntratimeServiceImpl implements IntratimeService {
         ResponseEntity<IntratimeInOutBean> response;
         try {
             response = template.postForEntity(properties.getCommandsUrl(), request, IntratimeInOutBean.class);
-            if (response.getStatusCode().equals(HttpStatus.OK))
+            if (response.getStatusCode().equals(HttpStatus.OK) || response.getStatusCode().equals(HttpStatus.CREATED)){
+                log.debug(command.toString() + " succesfully invoked");
                 return response.getBody();
+            }
             else
                 log.error("Communication problems:" + response.getStatusCode());
         } catch (Exception e) {
@@ -85,7 +89,7 @@ public class IntratimeServiceImpl implements IntratimeService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         ResponseEntity<IntratimeUser> response = template.postForEntity(properties.getLoginUrl(), request, IntratimeUser.class);
 
-        if (response.getStatusCode().equals(HttpStatus.OK)) {
+        if (response.getStatusCode().equals(HttpStatus.OK) || response.getStatusCode().equals(HttpStatus.CREATED)) {
             log.debug("login successfull");
             return response.getBody();
         } else

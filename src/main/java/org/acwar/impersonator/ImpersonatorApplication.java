@@ -41,28 +41,29 @@ public class ImpersonatorApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        scheduler.schedule(new Runnable() {
-                               @Override
-                               public void run() {
-                                   Map<IntratimeCommandsEnum, Date> dayDates = null;
-                                   try {
-                                       dayDates = CommandsDatesHelper.generateDatesSet(properties);
-                                   } catch (IntratimeCommandsExceptions intratimeCommandsExceptions) {
-                                       intratimeCommandsExceptions.printStackTrace();
-                                       log.error("Error in parameters");
-                                       System.exit(1);
-                                   }
-                                   for (IntratimeCommandsEnum command : dayDates.keySet()) {
-                                       log.debug("Command " + command.toString() + " scheduled for " + dayDates.get(command));
-                                       scheduler.schedule(
-                                               new IntratimeSchedulable(intratimeService, command),
-                                               dayDates.get(command)
-                                       );
-                                   }
-                               }
-                           },
-                new CronTrigger("0 1 * * 1-5 *")
+        scheduler.schedule(() ->{
+                       Map<IntratimeCommandsEnum, Date> dayDates = null;
+                       try {
+                           dayDates = CommandsDatesHelper.generateDatesSet(properties);
+                       } catch (IntratimeCommandsExceptions intratimeCommandsExceptions) {
+                           intratimeCommandsExceptions.printStackTrace();
+                           log.error("Error in parameters");
+                           System.exit(1);
+                       }
+                       for (Map.Entry<IntratimeCommandsEnum, Date> entry: dayDates.entrySet()){
+                           Date commandDate = entry.getValue();
+                           IntratimeCommandsEnum command = entry.getKey();
+                           log.debug("Command " + command.toString() + " scheduled for " + commandDate);
+                           scheduler.schedule(
+                                   new IntratimeSchedulable(intratimeService, command),
+                                   commandDate
+                           );
+                       }
+               },
+                new CronTrigger("0 0 1 * * MON-FRI")
         );
+
+
     }
 
 }
