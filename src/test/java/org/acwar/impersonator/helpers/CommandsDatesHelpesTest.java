@@ -51,14 +51,14 @@ public class CommandsDatesHelpesTest {
 
     @Test
     public void testAllOk() throws IntratimeCommandsExceptions {
-        assertNotNull(CommandsDatesHelper.generateDatesSet(properties));
+        assertNotNull(CommandsDatesHelper.generateFullDatesSet(properties));
     }
 
     @Test
     public  void testKOScenarios(){
         properties.setCheckInHour(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
@@ -66,35 +66,35 @@ public class CommandsDatesHelpesTest {
         resettProperties(properties);
         properties.setCheckInDelay(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
         resettProperties(properties);
         properties.setBreakOutHour(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
         resettProperties(properties);
         properties.setBreakOutDelay(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
         resettProperties(properties);
         properties.setBreakDuration(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
         resettProperties(properties);
         properties.setBreakAlteration(-1);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }
@@ -102,7 +102,7 @@ public class CommandsDatesHelpesTest {
         resettProperties(properties);
         properties.setCheckInHour(13);
         try{
-            CommandsDatesHelper.generateDatesSet(properties);
+            CommandsDatesHelper.generateFullDatesSet(properties);
         }catch (Exception e){
             assertEquals(IntratimeCommandsExceptions.class, e.getClass());
         }

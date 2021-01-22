@@ -53,6 +53,12 @@ public class IntratimeUser {
     private String USER_PASWORD;
     @Getter
     @Setter
+    private String change_pin;
+    @Getter
+    @Setter
+    private String user_sign;
+    @Getter
+    @Setter
     private List<IntratimeWorkcenters> projects;
     @Getter
     @Setter

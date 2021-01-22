@@ -36,6 +36,9 @@ public class IntratimeCompany {
     private String COMPANY_COORDINATES;
     @Getter
     @Setter
+    private String COMPANY_TLF;
+    @Getter
+    @Setter
     private String COMPANY_MAIL;
     @Getter
     @Setter
@@ -102,5 +105,26 @@ public class IntratimeCompany {
     private String DISTRIBUIDOR_ID;
     @Getter
     @Setter
+    private String company_has_documents;
+    @Getter
+    @Setter
+    private String user_change_password;
+    @Getter
+    @Setter
+    private String company_has_telecommuting;
+    @Getter
+    @Setter
+    private String company_save_coordinates;
+    @Getter
+    @Setter
+    private String company_not_save_coordinates;
+    @Getter
+    @Setter
     private String COMPANY_TIMEZONE;
+    @Getter
+    @Setter
+    private String SHOW_DOCUMENTS;
+    @Getter
+    @Setter
+    private String distribuidor;
 }

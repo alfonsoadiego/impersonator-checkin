@@ -20,6 +20,14 @@ public class IntratimeProperties {
 
     @Getter
     @Setter
+    private String requestCommandsUrl;
+
+    @Getter
+    @Setter
+    private String queryUrl;
+
+    @Getter
+    @Setter
     private String dryRun;
 
     /*

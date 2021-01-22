@@ -36,7 +36,7 @@ public class IntratimeServiceTest {
 
         @Bean
         public IntratimeService service(){
-            return new IntratimeServiceImpl();
+            return new IntratimeCheckinServiceImpl();
         }
         @Bean
         public IntratimeProperties properties(){

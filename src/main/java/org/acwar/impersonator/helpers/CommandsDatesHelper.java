@@ -14,26 +14,53 @@ public class CommandsDatesHelper {
     private CommandsDatesHelper() {
 
     }
-
-    public static Map<IntratimeCommandsEnum, Date> generateDatesSet(IntratimeProperties properties) throws IntratimeCommandsExceptions {
+    public static Map<IntratimeCommandsEnum, Date> generateFullDatesSet(IntratimeProperties properties) throws IntratimeCommandsExceptions {
+        return generateFullDatesSet(properties,new Date());
+    }
+    public static Map<IntratimeCommandsEnum, Date> generateFullDatesSet(IntratimeProperties properties,Date startDate) throws IntratimeCommandsExceptions {
         checkInput(properties);
 
         Map<IntratimeCommandsEnum, Date> response = new EnumMap<>(IntratimeCommandsEnum.class);
 
-        Date checkInTime = getCheckInTime(new Date(), properties.getCheckInHour(), properties.getCheckInDelay());
+        Date checkInTime = getCheckInTime(startDate, properties.getCheckInHour(), properties.getCheckInDelay());
         response.put(IntratimeCommandsEnum.CHECKIN, checkInTime);
+
+        response.putAll(generateDatesSet(properties,checkInTime));
+        return response;
+    }
+
+    public static Map<IntratimeCommandsEnum, Date> generateDatesSet(IntratimeProperties properties, Date checkInTime) throws IntratimeCommandsExceptions {
+        checkInput(properties);
+
+        Map<IntratimeCommandsEnum, Date> response = new EnumMap<>(IntratimeCommandsEnum.class);
 
         Date breakOutTime = getBreakOutTime(checkInTime, properties.getBreakOutHour(), properties.getBreakOutDelay());
         response.put(IntratimeCommandsEnum.BREAKOUT, breakOutTime);
 
+        response.putAll(generateDatesSet(properties,checkInTime,breakOutTime));
+        return response;
+    }
+    public static Map<IntratimeCommandsEnum, Date> generateDatesSet(IntratimeProperties properties, Date checkInTime, Date breakOutTime) throws IntratimeCommandsExceptions {
+        checkInput(properties);
+
+        Map<IntratimeCommandsEnum, Date> response = new EnumMap<>(IntratimeCommandsEnum.class);
+
         Date breakBackTime = getBreakBackTime(breakOutTime, properties.getBreakDuration(), properties.getBreakAlteration());
         response.put(IntratimeCommandsEnum.BREAKBACK, breakBackTime);
 
-        Date checkOutTime = getCheckOutTime(checkInTime, getTimeInBreak(breakOutTime, breakBackTime));
-        response.put(IntratimeCommandsEnum.CHECKOUT, checkOutTime);
+        response.putAll(generateDatesSet(properties,checkInTime,breakOutTime,breakBackTime));
+        return response;
+    }
+    public static Map<IntratimeCommandsEnum, Date> generateDatesSet(IntratimeProperties properties, Date checkInTime, Date breakOutTime,Date breakBackTime) throws IntratimeCommandsExceptions {
+        checkInput(properties);
+
+        Map<IntratimeCommandsEnum, Date> response = new EnumMap<>(IntratimeCommandsEnum.class);
+        response.put(IntratimeCommandsEnum.CHECKOUT, getCheckOutTime(checkInTime, getTimeInBreak(breakOutTime, breakBackTime)));
 
         return response;
     }
+
+
 
     private static void checkInput(IntratimeProperties properties) throws IntratimeCommandsExceptions {
 
