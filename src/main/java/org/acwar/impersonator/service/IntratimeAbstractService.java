@@ -1,16 +1,13 @@
 package org.acwar.impersonator.service;
 
 import org.acwar.impersonator.beans.IntratimeClockingList;
-import org.acwar.impersonator.beans.IntratimeInOutBean;
 import org.acwar.impersonator.beans.IntratimeUser;
 import org.acwar.impersonator.configuration.IntratimeProperties;
-import org.acwar.impersonator.enums.IntratimeCommandsEnum;
 import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Objects;
 
 
 public abstract class IntratimeAbstractService implements IntratimeService {
@@ -30,8 +27,6 @@ public abstract class IntratimeAbstractService implements IntratimeService {
     private IntratimeProperties properties;
     @Autowired
     private RestTemplate template;
-
-    public abstract IntratimeInOutBean launchCommand(Date commandDate, IntratimeCommandsEnum command);
 
     protected HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -69,7 +64,7 @@ public abstract class IntratimeAbstractService implements IntratimeService {
     public IntratimeClockingList queryClockingsForDate(Date commandDate) {
 
         HttpHeaders headers = getHttpHeaders();
-        if (headers == null) return new IntratimeClockingList();;
+        if (headers == null) return new IntratimeClockingList();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getQueryUrl())
                 .queryParam("type", "0,1,2,3")
@@ -88,7 +83,7 @@ public abstract class IntratimeAbstractService implements IntratimeService {
                     IntratimeClockingList.class);
 
             if (response.getStatusCode().is2xxSuccessful())
-                return response.getBody().setDate_listed(commandDate);
+                return Objects.requireNonNull(response.getBody()).setDate_listed(commandDate);
             else
                 log.error("Communication problems:" + response.getStatusCode());
         } catch (Exception e) {
@@ -115,6 +110,4 @@ public abstract class IntratimeAbstractService implements IntratimeService {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss");
         return dateFormat.format(calendar.getTime());
     }
-
-
 }

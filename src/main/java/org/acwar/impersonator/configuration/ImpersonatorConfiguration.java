@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.client.RestTemplate;
@@ -41,4 +42,5 @@ public class ImpersonatorConfiguration {
         threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
         return threadPoolTaskScheduler;
     }
+
 }
