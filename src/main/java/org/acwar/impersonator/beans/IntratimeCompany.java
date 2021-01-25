@@ -120,6 +120,9 @@ public class IntratimeCompany {
     private String company_not_save_coordinates;
     @Getter
     @Setter
+    private String reports_v2_active;
+    @Getter
+    @Setter
     private String COMPANY_TIMEZONE;
     @Getter
     @Setter

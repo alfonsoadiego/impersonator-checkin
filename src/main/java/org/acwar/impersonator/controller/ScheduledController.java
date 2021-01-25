@@ -25,10 +25,11 @@ public class ScheduledController {
     public String index() {
         StringBuilder builder = new StringBuilder();
         Iterator<Runnable> scheduledJobs = scheduler.getScheduledThreadPoolExecutor().getQueue().iterator();
-        Calendar cal = Calendar.getInstance();
+        Calendar cal;
         while(scheduledJobs.hasNext()) {
+            cal = Calendar.getInstance();
             cal.add(Calendar.MILLISECOND,(int) ((RunnableScheduledFuture)scheduledJobs.next()).getDelay(TimeUnit.MILLISECONDS));
-            builder.append("A job is pending to execute at " + cal.getTime());
+            builder.append("A job is pending to execute at <b>" + cal.getTime() + "</b><br/>");
         }
 
         return builder.toString();

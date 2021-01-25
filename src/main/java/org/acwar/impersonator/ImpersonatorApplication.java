@@ -77,7 +77,7 @@ public class ImpersonatorApplication{
                     IntratimeClockingList list = null;
                     Map<IntratimeCommandsEnum, Date> missingDayDates = null;
                     try {
-                        list = intratimeRequestService.queryClockingsForDate(new Date());
+                        list = intratimeService.queryClockingsForDate(new Date());
                         missingDayDates = list.getMissingCommands(properties);
                     } catch (IntratimeCommandsExceptions intratimeCommandsExceptions) {
                         intratimeCommandsExceptions.printStackTrace();
