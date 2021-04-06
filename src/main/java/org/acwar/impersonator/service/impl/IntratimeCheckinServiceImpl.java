@@ -1,24 +1,19 @@
-package org.acwar.impersonator.service;
+package org.acwar.impersonator.service.impl;
 
 import org.acwar.impersonator.beans.IntratimeInOutBean;
-import org.acwar.impersonator.beans.IntratimeUser;
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
-import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service("intratimeCheckinServiceImpl")

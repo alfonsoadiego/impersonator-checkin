@@ -1,8 +1,9 @@
-package org.acwar.impersonator.service;
+package org.acwar.impersonator.service.impl;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
+import org.acwar.impersonator.service.IntratimeService;
 
 import java.util.Date;
 

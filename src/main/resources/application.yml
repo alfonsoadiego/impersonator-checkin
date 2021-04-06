@@ -1,0 +1,29 @@
+intratime:
+    breakAlteration: 10
+    breakDuration: 35
+    breakOutDelay: 15
+    breakOutHour: 14
+    checkInDelay: 10
+    checkInHour: 8
+    dryRun: false
+    commandsUrl: https://newapi.intratime.es/api/user/clocking
+    loginUrl: https://newapi.intratime.es/api/user/login
+    queryUrl: https://newapi.intratime.es/api/user/clockings-list
+    requestCommandsUrl: https://newapi.intratime.es/api/user/clocking_requests
+    pin: 647
+    user: alfonso.adiego@mercury-tfs.com
+logging:
+    level:
+        org:
+            acwar:
+                impersonator: DEBUG
+server:
+    port: 8080
+jira:
+    user:
+        password: *
+    fractions:
+        - jirakey: SANGTS-1095
+          ratio: 0.25
+        - jirakey: SANGTS-110
+          ratio: 0.75

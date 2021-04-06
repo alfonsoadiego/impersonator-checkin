@@ -1,7 +1,5 @@
-package org.acwar.impersonator.service;
+package org.acwar.impersonator.service.impl;
 
-import org.acwar.impersonator.beans.IntratimeClockingListInOutBean;
-import org.acwar.impersonator.beans.IntratimeClockingRequest;
 import org.acwar.impersonator.beans.IntratimeClockingRequestResponse;
 import org.acwar.impersonator.beans.IntratimeInOutBean;
 import org.acwar.impersonator.configuration.IntratimeProperties;

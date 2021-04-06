@@ -4,6 +4,8 @@ import org.acwar.impersonator.beans.IntratimeInOutBean;
 import org.acwar.impersonator.beans.IntratimeUser;
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.enums.IntratimeCommandsEnum;
+import org.acwar.impersonator.service.impl.IntratimeCheckinServiceImpl;
+import org.acwar.impersonator.service.impl.IntratimeSchedulable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

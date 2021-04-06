@@ -1,9 +1,10 @@
-package org.acwar.impersonator.service;
+package org.acwar.impersonator.service.impl;
 
 import org.acwar.impersonator.beans.IntratimeClockingList;
 import org.acwar.impersonator.beans.IntratimeUser;
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
+import org.acwar.impersonator.service.IntratimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
