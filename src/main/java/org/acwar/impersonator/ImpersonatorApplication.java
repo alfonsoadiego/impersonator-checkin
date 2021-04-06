@@ -1,15 +1,11 @@
 package org.acwar.impersonator;
 
-import org.acwar.impersonator.beans.IntratimeClockingList;
 import org.acwar.impersonator.configuration.IntratimeProperties;
 import org.acwar.impersonator.configuration.JiraImpersonationFraction;
 import org.acwar.impersonator.configuration.JiraImpersonatorFractionList;
-import org.acwar.impersonator.enums.IntratimeCommandsEnum;
-import org.acwar.impersonator.exceptions.IntratimeCommandsExceptions;
-import org.acwar.impersonator.service.JiraWorklogManagementService;
-import org.acwar.impersonator.service.impl.IntratimeSchedulable;
 import org.acwar.impersonator.service.IntratimeService;
-import org.acwar.impersonator.service.impl.JiraWorklogQueryServiceImpl;
+import org.acwar.impersonator.service.JiraWorklogManagementService;
+import org.acwar.impersonator.service.JiraWorklogQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootApplication
@@ -54,7 +46,7 @@ public class ImpersonatorApplication{
     private ThreadPoolTaskScheduler scheduler;
 
     @Autowired
-    private JiraWorklogQueryServiceImpl jira;
+    private JiraWorklogQueryService jira;
 
     @Autowired
     private JiraImpersonatorFractionList fractionList;
@@ -80,7 +72,7 @@ public class ImpersonatorApplication{
                     }
 
                 },
-                new CronTrigger("0 0 21 ? * MON-FRI")
+                new CronTrigger("0 0 20 ? * MON-FRI")
         );
         return args -> {
             log.debug("Scheduled tasks");

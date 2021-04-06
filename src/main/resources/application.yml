@@ -21,7 +21,7 @@ server:
     port: 8080
 jira:
     user:
-        password: *
+        password: .
     fractions:
         - jirakey: SANGTS-1095
           ratio: 0.25
