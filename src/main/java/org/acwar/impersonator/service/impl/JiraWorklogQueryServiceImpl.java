@@ -16,6 +16,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,9 +31,25 @@ public class JiraWorklogQueryServiceImpl implements JiraWorklogQueryService {
     private Calendar sinceCalendar;
     private String user;
 
-    @Value("${jira.user.password:none}")
+    @Value("${jira.apiUrl:http://jira.mercury-tfs.com/rest/api/2/}")
+    public String JIRA_URL;
+    private String JIRA_API_WORKLOG = JIRA_URL + "worklog/";
+
+    @Value("${jira.userPassword:none}")
     @Getter @Setter
     private String jiraPassword;
+
+    @PostConstruct
+    public void JiraWorklogQueryServicePost(){
+        LOGGER.debug("JiraWorklogQueryServiceImpl instiated. ");
+        JIRA_API_WORKLOG = JIRA_URL + "worklog/";
+        LOGGER.debug("Using " + JIRA_API_WORKLOG);
+    }
+
+    public JiraWorklogQueryService setPass(String jiraPassword){
+        setJiraPassword(jiraPassword);
+        return this;
+    }
 
     @Override
     public Integer getWorklogHours(){
@@ -56,7 +73,7 @@ public class JiraWorklogQueryServiceImpl implements JiraWorklogQueryService {
             HttpEntity<String> entity = new HttpEntity<>("body", httpHeaders);
             final RestTemplate restTemplate = new RestTemplate();
 
-            ResponseEntity<WorklogUpdatedList> response = restTemplate.exchange("http://jira.mercury-tfs.com/rest/api/2/worklog/updated?since="+getTimeStamp(), HttpMethod.GET, entity, WorklogUpdatedList.class);
+            ResponseEntity<WorklogUpdatedList> response = restTemplate.exchange(JIRA_API_WORKLOG + "updated?since="+getTimeStamp(), HttpMethod.GET, entity, WorklogUpdatedList.class);
             processWorklogs(response.getBody().getValues());
 
             while (!response.getBody().getLastPage()){

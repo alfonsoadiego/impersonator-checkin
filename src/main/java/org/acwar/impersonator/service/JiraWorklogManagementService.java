@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Map;
 
 public interface JiraWorklogManagementService {
-    boolean createLog(double timeToLog, String jiraKey);
+    boolean createLog(double timeToLog, String jiraKey,String message);
 
     JiraWorklogManagementService forDate(Date date);
 }

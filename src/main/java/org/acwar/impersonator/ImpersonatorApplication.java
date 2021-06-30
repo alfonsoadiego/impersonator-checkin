@@ -27,36 +27,30 @@ import java.util.Calendar;
 public class ImpersonatorApplication{
     private Logger log = LoggerFactory.getLogger(ImpersonatorApplication.class);
 
+    public ImpersonatorApplication(@Qualifier("localThreadPool") ThreadPoolTaskScheduler scheduler,
+                                   JiraWorklogQueryService jira,
+                                   JiraImpersonatorFractionList fractionList,
+                                   JiraWorklogManagementService managementService) {
+        this.scheduler = scheduler;
+        this.jira = jira;
+        this.fractionList = fractionList;
+        this.managementService = managementService;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(ImpersonatorApplication.class, args);
     }
 
-    @Qualifier("intratimeCheckinServiceImpl")
-    @Autowired
-    private IntratimeService intratimeService;
-
-    @Qualifier("intratimeCheckinRequestServiceImpl")
-    @Autowired
-    private IntratimeService intratimeRequestService;
-
-    @Autowired
-    private IntratimeProperties properties;
-    @Autowired
-    @Qualifier("localThreadPool")
-    private ThreadPoolTaskScheduler scheduler;
-
-    @Autowired
-    private JiraWorklogQueryService jira;
-
-    @Autowired
-    private JiraImpersonatorFractionList fractionList;
-
-    @Autowired
-    private JiraWorklogManagementService managementService;
+    private final ThreadPoolTaskScheduler scheduler;
+    private final JiraWorklogQueryService jira;
+    private final JiraImpersonatorFractionList fractionList;
+    private final JiraWorklogManagementService managementService;
 
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) throws Exception {
+
+        log.debug("Using " + fractionList.toString());
 
         scheduler.schedule(() ->{
 
@@ -64,11 +58,16 @@ public class ImpersonatorApplication{
 
                     Integer response = jira.configureSince(cal).configureUser("alfonso.adiego").getWorklogHours();
 
-                    Integer remainingToLog = 30600 - response;
+
+                    Integer remainingToLog;
+                    if (Calendar.FRIDAY == cal.get(Calendar.DAY_OF_WEEK))
+                        remainingToLog = 21600 - response;
+                    else
+                        remainingToLog = 30600 - response;
 
                     for (JiraImpersonationFraction fraction : fractionList.getFractions()) {
                         log.debug(fraction.getJiraKey() + ":" + String.valueOf(remainingToLog * fraction.getRatio()));
-                        managementService.forDate(cal.getTime()).createLog(remainingToLog * fraction.getRatio(), fraction.getJiraKey());
+                        managementService.forDate(cal.getTime()).createLog(remainingToLog * fraction.getRatio(), fraction.getJiraKey(), fraction.getMessage());
                     }
 
                 },

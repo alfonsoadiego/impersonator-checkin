@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.acwar.impersonator.beans.worklogissue.request.Worklog;
 import org.acwar.impersonator.beans.worklogissue.response.WorklogResponse;
-import org.acwar.impersonator.configuration.JiraImpersonationFraction;
 import org.acwar.impersonator.service.JiraWorklogManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,43 +15,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
-//@ConfigurationProperties("jira")
-//List<JiraImpersonationFraction> fractions;
 public class JiraWorklogManagementServiceImpl implements JiraWorklogManagementService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JiraWorklogManagementServiceImpl.class);
 
+    @Value("${jira.apiUrl:http://jira.mercury-tfs.com/rest/api/2/}")
+    public String JIRA_URL;
+    private String JIRA_API_ISSUES;
+
     private Date requestsDate;
 
-    @Value("${jira.user.password:none}")
-    @Getter
-    @Setter
+    @Value("${jira.userPassword:none}")
+    @Getter @Setter
     private String jiraPassword;
 
+    public JiraWorklogManagementService setPass(String jiraPassword){
+        setJiraPassword(jiraPassword);
+        return this;
+    }
+
+    @PostConstruct
+    public void JiraWorklogManagementServicePost(){
+        LOGGER.debug("JiraWorklogManagementServiceImpl instiated");
+        JIRA_API_ISSUES =  JIRA_URL + "issue/";
+        LOGGER.debug("Using " + JIRA_API_ISSUES);
+    }
 
     @Override
-    public boolean createLog(double timeToLog, String jiraKey) {
+    public boolean createLog(double timeToLog, String jiraKey, String message) {
         RestTemplate restTemplate = new RestTemplate();
 
         Worklog log = new Worklog();
-        log.setComment("Some Work done");
+        log.setComment(message);
         log.setTimeSpentSeconds((int) Math.round(timeToLog));
         log.setStarted(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(requestsDate));
 
         HttpEntity<Worklog> request = new HttpEntity<>(log,buildHttpHeaders());
         try{
             ResponseEntity<WorklogResponse> response = restTemplate.postForEntity(
-                    "http://jira.mercury-tfs.com/rest/api/2/issue/"+jiraKey+"/worklog",
+                    JIRA_API_ISSUES +jiraKey+"/worklog",
                     request,
                     WorklogResponse.class
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Unable to create Log:"+ e.getMessage());
         }
         return false;
     }

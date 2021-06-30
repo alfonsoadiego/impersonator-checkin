@@ -1,29 +1,35 @@
 intratime:
-    breakAlteration: 10
-    breakDuration: 35
-    breakOutDelay: 15
-    breakOutHour: 14
-    checkInDelay: 10
-    checkInHour: 8
-    dryRun: false
-    commandsUrl: https://newapi.intratime.es/api/user/clocking
-    loginUrl: https://newapi.intratime.es/api/user/login
-    queryUrl: https://newapi.intratime.es/api/user/clockings-list
-    requestCommandsUrl: https://newapi.intratime.es/api/user/clocking_requests
-    pin: 647
-    user: alfonso.adiego@mercury-tfs.com
+  breakAlteration: 10
+  breakDuration: 35
+  breakOutDelay: 15
+  breakOutHour: 14
+  checkInDelay: 10
+  checkInHour: 8
+  dryRun: false
+  commandsUrl: https://newapi.intratime.es/api/user/clocking
+  loginUrl: https://newapi.intratime.es/api/user/login
+  queryUrl: https://newapi.intratime.es/api/user/clockings-list
+  requestCommandsUrl: https://newapi.intratime.es/api/user/clocking_requests
+  pin: 647
+  user: alfonso.adiego@mercury-tfs.com
 logging:
-    level:
-        org:
-            acwar:
-                impersonator: DEBUG
+  level:
+    org:
+      acwar:
+        impersonator: DEBUG
 server:
-    port: 8080
+  port: 8787
 jira:
-    user:
-        password: .
-    fractions:
-        - jirakey: SANGTS-1095
-          ratio: 0.25
-        - jirakey: SANGTS-110
-          ratio: 0.75
+  apiUrl: "http://jira.mercury-tfs.com/rest/api/2/"
+  userPassword: lePAss
+divisions:
+  fractions:
+    - jirakey: SANGTS-1095
+      ratio: 0.25
+      message: "Dailys y reuniones con cliente"
+    - jirakey: SANGTS-110
+      ratio: 0.5
+      message: "Soporte a equipo e incidencias"
+    - jirakey: SANGTS-110
+      ratio: 0.25
+      message: "Arquitectura y diseño. Documentacion"
